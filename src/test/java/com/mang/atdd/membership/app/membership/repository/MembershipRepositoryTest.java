@@ -27,6 +27,7 @@ public class MembershipRepositoryTest {
 
         // then
         assertThat(result.getId()).isNotNull();
+        assertThat(result.getMembershipName()).isEqualTo("네이버");
     }
 
 }
