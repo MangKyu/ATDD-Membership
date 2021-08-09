@@ -1,4 +1,4 @@
-package com.mang.atdd.membership.app.exception;
+package com.mang.atdd.membership.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

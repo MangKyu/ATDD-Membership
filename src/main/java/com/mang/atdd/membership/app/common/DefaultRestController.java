@@ -1,7 +1,7 @@
 package com.mang.atdd.membership.app.common;
 
-import com.mang.atdd.membership.app.exception.MembershipErrorResult;
-import com.mang.atdd.membership.app.exception.MembershipException;
+import com.mang.atdd.membership.exception.MembershipErrorResult;
+import com.mang.atdd.membership.exception.MembershipException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

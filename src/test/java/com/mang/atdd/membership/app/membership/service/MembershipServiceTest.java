@@ -1,8 +1,8 @@
 package com.mang.atdd.membership.app.membership.service;
 
 import com.mang.atdd.membership.app.enums.MembershipType;
-import com.mang.atdd.membership.app.exception.MembershipErrorResult;
-import com.mang.atdd.membership.app.exception.MembershipException;
+import com.mang.atdd.membership.exception.MembershipErrorResult;
+import com.mang.atdd.membership.exception.MembershipException;
 import com.mang.atdd.membership.app.membership.dto.MembershipResponse;
 import com.mang.atdd.membership.app.membership.entity.Membership;
 import com.mang.atdd.membership.app.membership.repository.MembershipRepository;
