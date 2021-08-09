@@ -1,5 +1,6 @@
 package com.mang.atdd.membership.app.membership.repository;
 
+import com.mang.atdd.membership.app.enums.MembershipType;
 import com.mang.atdd.membership.app.membership.entity.Membership;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class MembershipRepositoryTest {
     public void 멤버십등록() {
         // given
         final Membership membership = Membership.builder()
-                .membershipName("네이버")
+                .membershipType(MembershipType.NAVER)
                 .build();
 
         // when
@@ -27,7 +28,7 @@ public class MembershipRepositoryTest {
 
         // then
         assertThat(result.getId()).isNotNull();
-        assertThat(result.getMembershipName()).isEqualTo("네이버");
+        assertThat(result.getMembershipType()).isEqualTo(MembershipType.NAVER);
     }
 
 }

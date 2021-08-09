@@ -1,5 +1,6 @@
 package com.mang.atdd.membership.app.membership.entity;
 
+import com.mang.atdd.membership.app.enums.MembershipType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class Membership {
     @Column(nullable = false)
     private final Long id;
 
-    @Column(nullable = false, length = 20)
-    private final String membershipName;
+    @Enumerated(EnumType.STRING)
+    private final MembershipType membershipType;
 
 }
