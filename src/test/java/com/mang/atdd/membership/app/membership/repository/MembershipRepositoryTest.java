@@ -20,7 +20,9 @@ public class MembershipRepositoryTest {
     public void 멤버십등록() {
         // given
         final Membership membership = Membership.builder()
+                .userId("userId")
                 .membershipType(MembershipType.NAVER)
+                .point(10000)
                 .build();
 
         // when
@@ -28,7 +30,9 @@ public class MembershipRepositoryTest {
 
         // then
         assertThat(result.getId()).isNotNull();
+        assertThat(result.getUserId()).isEqualTo("userId");
         assertThat(result.getMembershipType()).isEqualTo(MembershipType.NAVER);
+        assertThat(result.getPoint()).isEqualTo(10000);
     }
 
 }

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -24,5 +25,12 @@ public class Membership {
 
     @Enumerated(EnumType.STRING)
     private final MembershipType membershipType;
+
+    @Column(nullable = false)
+    private final String userId;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private final Integer point;
 
 }
