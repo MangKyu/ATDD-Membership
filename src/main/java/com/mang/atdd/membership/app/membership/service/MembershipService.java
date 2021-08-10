@@ -9,6 +9,8 @@ import com.mang.atdd.membership.app.membership.repository.MembershipRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MembershipService {
@@ -33,6 +35,10 @@ public class MembershipService {
                 .id(savedMembership.getId())
                 .membershipType(savedMembership.getMembershipType())
                 .build();
+    }
+
+    public List<Membership> getMembershipList(String userId) {
+        return membershipRepository.findAllByUserId(userId);
     }
 
 }
