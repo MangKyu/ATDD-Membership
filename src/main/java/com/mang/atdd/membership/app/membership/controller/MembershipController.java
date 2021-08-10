@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 import static com.mang.atdd.membership.app.membership.constants.MembershipConstants.USER_ID_HEADER;
@@ -39,6 +38,14 @@ public class MembershipController extends DefaultRestController {
             @RequestHeader(USER_ID_HEADER) final String userId) {
 
         return ResponseEntity.ok(membershipService.getMembershipList(userId));
+    }
+
+    @GetMapping("/api/v1/membership")
+    public ResponseEntity<MembershipDetailResponse> getMembership(
+            @RequestHeader(USER_ID_HEADER) final String userId,
+            @RequestParam final MembershipType membershipType) {
+
+        return ResponseEntity.ok(membershipService.getMembership(userId, membershipType));
     }
 
 }
