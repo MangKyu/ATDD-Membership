@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @Builder
 @RequiredArgsConstructor
-public class MembershipResponse {
+public class MembershipAddResponse {
 
     private final Long id;
     private final MembershipType membershipType;

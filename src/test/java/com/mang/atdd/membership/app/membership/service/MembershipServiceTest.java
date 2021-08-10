@@ -1,9 +1,10 @@
 package com.mang.atdd.membership.app.membership.service;
 
 import com.mang.atdd.membership.app.enums.MembershipType;
+import com.mang.atdd.membership.app.membership.dto.MembershipDetailResponse;
 import com.mang.atdd.membership.exception.MembershipErrorResult;
 import com.mang.atdd.membership.exception.MembershipException;
-import com.mang.atdd.membership.app.membership.dto.MembershipResponse;
+import com.mang.atdd.membership.app.membership.dto.MembershipAddResponse;
 import com.mang.atdd.membership.app.membership.entity.Membership;
 import com.mang.atdd.membership.app.membership.repository.MembershipRepository;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ public class MembershipServiceTest {
         )).when(membershipRepository).findAllByUserId(userId);
 
         // when
-        final List<Membership> result = target.getMembershipList(userId);
+        final List<MembershipDetailResponse> result = target.getMembershipList(userId);
 
         // then
         assertThat(result.size()).isEqualTo(3);
@@ -66,7 +67,7 @@ public class MembershipServiceTest {
         doReturn(membership()).when(membershipRepository).save(any(Membership.class));
 
         // when
-        final MembershipResponse result = target.addMembership(userId, membershipType, point);
+        final MembershipAddResponse result = target.addMembership(userId, membershipType, point);
 
         // then
         assertThat(result.getId()).isNotNull();

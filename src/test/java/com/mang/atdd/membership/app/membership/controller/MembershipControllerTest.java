@@ -3,10 +3,11 @@ package com.mang.atdd.membership.app.membership.controller;
 
 import com.google.gson.Gson;
 import com.mang.atdd.membership.app.enums.MembershipType;
+import com.mang.atdd.membership.app.membership.dto.MembershipDetailResponse;
 import com.mang.atdd.membership.exception.MembershipErrorResult;
 import com.mang.atdd.membership.exception.MembershipException;
-import com.mang.atdd.membership.app.membership.dto.MembershipRequest;
-import com.mang.atdd.membership.app.membership.dto.MembershipResponse;
+import com.mang.atdd.membership.app.membership.dto.MembershipAddRequest;
+import com.mang.atdd.membership.app.membership.dto.MembershipAddResponse;
 import com.mang.atdd.membership.app.membership.service.MembershipService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static com.mang.atdd.membership.app.membership.constants.MembershipConstants.USER_ID_HEADER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,6 +47,40 @@ public class MembershipControllerTest {
         gson = new Gson();
         mockMvc = MockMvcBuilders.standaloneSetup(target)
                 .build();
+    }
+
+    @Test
+    public void 멤버십목록조회실패_사용자식별값이헤더에없음() throws Exception {
+        // given
+        final String url = "/api/v1/membership/list";
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get(url)
+        );
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 멤버십목록조회성공() throws Exception {
+        // given
+        final String url = "/api/v1/membership/list";
+        doReturn(Arrays.asList(
+                MembershipDetailResponse.builder().build(),
+                MembershipDetailResponse.builder().build(),
+                MembershipDetailResponse.builder().build()
+        )).when(membershipService).getMembershipList("12345");
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get(url)
+                        .header(USER_ID_HEADER, "12345")
+        );
+
+        // then
+        resultActions.andExpect(status().isOk());
     }
 
     @Test
@@ -138,7 +174,7 @@ public class MembershipControllerTest {
     public void 멤버십등록성공() throws Exception {
         // given
         final String url = "/api/v1/membership";
-        final MembershipResponse membershipResponse = MembershipResponse.builder()
+        final MembershipAddResponse membershipResponse = MembershipAddResponse.builder()
                 .id(-1L)
                 .membershipType(MembershipType.NAVER).build();
 
@@ -155,16 +191,16 @@ public class MembershipControllerTest {
         // then
         resultActions.andExpect(status().isCreated());
 
-        final MembershipResponse response = gson.fromJson(resultActions.andReturn()
+        final MembershipAddResponse response = gson.fromJson(resultActions.andReturn()
                 .getResponse()
-                .getContentAsString(StandardCharsets.UTF_8), MembershipResponse.class);
+                .getContentAsString(StandardCharsets.UTF_8), MembershipAddResponse.class);
 
         assertThat(response.getMembershipType()).isEqualTo(MembershipType.NAVER);
         assertThat(response.getId()).isNotNull();
     }
 
-    private MembershipRequest membershipRequest(final Integer point, final MembershipType membershipType) {
-        return MembershipRequest.builder()
+    private MembershipAddRequest membershipRequest(final Integer point, final MembershipType membershipType) {
+        return MembershipAddRequest.builder()
                 .point(point)
                 .membershipType(membershipType)
                 .build();

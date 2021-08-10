@@ -6,8 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -32,5 +35,13 @@ public class Membership {
     @Column(nullable = false)
     @ColumnDefault("0")
     private final Integer point;
+
+    @CreationTimestamp
+    @Column(nullable = false, length = 20, updatable = false)
+    private final LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(length = 20)
+    private final LocalDateTime updatedAt;
 
 }

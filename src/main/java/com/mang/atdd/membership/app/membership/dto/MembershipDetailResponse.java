@@ -3,23 +3,18 @@ package com.mang.atdd.membership.app.membership.dto;
 import com.mang.atdd.membership.app.enums.MembershipType;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
 @RequiredArgsConstructor
-@NoArgsConstructor(force = true)
-public class MembershipRequest {
+public class MembershipDetailResponse {
 
-    @NotNull
-    @Min(0)
-    private final Integer point;
-
-    @NotNull
+    private final Long id;
     private final MembershipType membershipType;
+    private final LocalDateTime createdAt;
+    private final Integer point;
 
 }
