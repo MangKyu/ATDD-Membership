@@ -48,4 +48,13 @@ public class MembershipController extends DefaultRestController {
         return ResponseEntity.ok(membershipService.getMembership(userId, membershipType));
     }
 
+    @DeleteMapping("/api/v1/membership/{id}")
+    public ResponseEntity<Void> getMembership(
+            @RequestHeader(USER_ID_HEADER) final String userId,
+            @PathVariable final Long id) {
+
+        membershipService.removeMembership(id, userId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
