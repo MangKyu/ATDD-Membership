@@ -6,7 +6,7 @@ import com.mang.atdd.membership.app.enums.MembershipType;
 import com.mang.atdd.membership.app.membership.dto.MembershipDetailResponse;
 import com.mang.atdd.membership.exception.MembershipErrorResult;
 import com.mang.atdd.membership.exception.MembershipException;
-import com.mang.atdd.membership.app.membership.dto.MembershipAddRequest;
+import com.mang.atdd.membership.app.membership.dto.MembershipRequest;
 import com.mang.atdd.membership.app.membership.dto.MembershipAddResponse;
 import com.mang.atdd.membership.app.membership.service.MembershipService;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,6 +50,56 @@ public class MembershipControllerTest {
     }
 
     @Test
+    public void 멤버십적립실패_사용자식별값이헤더에없음() throws Exception {
+        // given
+        final String url = "/api/v1/membership/-1/accumulate";
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(url)
+                        .content(gson.toJson(membershipRequest(10000)))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 멤버십적립실패_포인트가음수() throws Exception {
+        // given
+        final String url = "/api/v1/membership/-1/accumulate";
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(url)
+                        .header(USER_ID_HEADER, "12345")
+                        .content(gson.toJson(membershipRequest(-1, MembershipType.NAVER)))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 멤버십적립성공() throws Exception {
+        // given
+        final String url = "/api/v1/membership/-1/accumulate";
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(url)
+                        .header(USER_ID_HEADER, "12345")
+                        .content(gson.toJson(membershipRequest(10000)))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andExpect(status().isNoContent());
+    }
+
+    @Test
     public void 멤버십삭제실패_사용자식별값이헤더에없음() throws Exception {
         // given
         final String url = "/api/v1/membership/-1";
@@ -79,7 +129,7 @@ public class MembershipControllerTest {
     }
 
     @Test
-    public void 멤버십상세조회실패_사용자식별값이헤더에없음() throws Exception {
+    public void 자() throws Exception {
         // given
         final String url = "/api/v1/membership";
 
@@ -301,10 +351,16 @@ public class MembershipControllerTest {
         assertThat(response.getId()).isNotNull();
     }
 
-    private MembershipAddRequest membershipRequest(final Integer point, final MembershipType membershipType) {
-        return MembershipAddRequest.builder()
+    private MembershipRequest membershipRequest(final Integer point, final MembershipType membershipType) {
+        return MembershipRequest.builder()
                 .point(point)
                 .membershipType(membershipType)
+                .build();
+    }
+
+    private MembershipRequest membershipRequest(final Integer point) {
+        return MembershipRequest.builder()
+                .point(point)
                 .build();
     }
 
