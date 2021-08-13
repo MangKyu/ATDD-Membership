@@ -24,6 +24,7 @@ public class MembershipService {
     private final PointService ratePointService;
     private final MembershipRepository membershipRepository;
 
+    @Transactional
     public MembershipAddResponse addMembership(final String userId, final MembershipType membershipType, final Integer point) {
         final Membership result = membershipRepository.findByUserIdAndMembershipType(userId, membershipType);
         if (result != null) {
@@ -71,6 +72,7 @@ public class MembershipService {
                 .build();
     }
 
+    @Transactional
     public void removeMembership(final Long membershipId, final String userId) {
         final Optional<Membership> optionalMembership = membershipRepository.findById(membershipId);
         final Membership membership = optionalMembership.orElseThrow(() -> new MembershipException(MembershipErrorResult.MEMBERSHIP_NOT_FOUND));
@@ -81,6 +83,7 @@ public class MembershipService {
         membershipRepository.deleteById(membershipId);
     }
 
+    @Transactional
     public void accumulateMembershipPoint(final Long membershipId, final String userId, final int amount) {
         final Optional<Membership> optionalMembership = membershipRepository.findById(membershipId);
         final Membership membership = optionalMembership.orElseThrow(() -> new MembershipException(MembershipErrorResult.MEMBERSHIP_NOT_FOUND));
@@ -90,11 +93,7 @@ public class MembershipService {
 
         final int additionalAmount = ratePointService.calculateAmount(amount);
 
-        final Membership newMembership = Membership.builder()
-                .id(membershipId)
-                .point(amount + additionalAmount).build();
-
-        membershipRepository.save(newMembership);
+        membership.setPoint(additionalAmount + membership.getPoint());
     }
 
 }
