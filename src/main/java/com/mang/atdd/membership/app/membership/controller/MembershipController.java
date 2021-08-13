@@ -5,6 +5,7 @@ import com.mang.atdd.membership.app.enums.MembershipType;
 import com.mang.atdd.membership.app.membership.dto.MembershipAddRequest;
 import com.mang.atdd.membership.app.membership.dto.MembershipAddResponse;
 import com.mang.atdd.membership.app.membership.dto.MembershipDetailResponse;
+import com.mang.atdd.membership.app.membership.dto.MembershipPointRequest;
 import com.mang.atdd.membership.app.membership.service.MembershipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -54,6 +55,16 @@ public class MembershipController extends DefaultRestController {
             @PathVariable final Long id) {
 
         membershipService.removeMembership(id, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/api/v1/membership/{id}/accumulate")
+    public ResponseEntity<Void> accumulateMembershipPoint(
+            @RequestHeader(USER_ID_HEADER) final String userId,
+            @PathVariable final Long id,
+            @RequestBody @Valid final MembershipPointRequest pointRequest) {
+
+        membershipService.accumulateMembershipPoint(id, userId, pointRequest.getPoint());
         return ResponseEntity.noContent().build();
     }
 
