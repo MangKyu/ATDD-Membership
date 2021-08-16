@@ -129,7 +129,7 @@ public class MembershipControllerTest {
     }
 
     @Test
-    public void 자() throws Exception {
+    public void 멤버십상세조회실패_사용자식별값이헤더에없음() throws Exception {
         // given
         final String url = "/api/v1/membership";
 
