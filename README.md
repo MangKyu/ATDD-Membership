@@ -58,7 +58,7 @@ TDD 개발 방법론의 프로그래밍 순서는 매우 단순하다.
     - 응답: X
 
 ### 기술 요구 사항
-- 개발 언어 Java 8 or Kotlin
+- 개발 언어: Java 8
 - Framework: Spring Boot
 - ORM: JPA
 - DB: Mysql/H2
