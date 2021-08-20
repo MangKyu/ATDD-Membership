@@ -146,20 +146,17 @@ public class MembershipControllerTest {
     public void 멤버십상세조회실패_멤버십타입이파라미터에없음() throws Exception {
         // given
         final String url = "/api/v1/membership";
-        doThrow(new MembershipException(MembershipErrorResult.MEMBERSHIP_NOT_FOUND))
-                .when(membershipService)
-                .getMembership("12345", MembershipType.NAVER);
 
         // when
         final ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get(url)
                         .header(USER_ID_HEADER, "12345")
-                        .param("membershipType", MembershipType.NAVER.name())
+                        .param("membershipType", "empty")
 
         );
 
         // then
-        resultActions.andExpect(status().isNotFound());
+        resultActions.andExpect(status().isBadRequest());
     }
 
     @Test
