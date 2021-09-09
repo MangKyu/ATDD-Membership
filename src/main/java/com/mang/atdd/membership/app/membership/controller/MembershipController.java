@@ -1,5 +1,6 @@
 package com.mang.atdd.membership.app.membership.controller;
 
+import com.mang.atdd.membership.aop.ExecutionTimeChecker;
 import com.mang.atdd.membership.app.common.DefaultRestController;
 import com.mang.atdd.membership.app.enums.MembershipType;
 import com.mang.atdd.membership.app.membership.dto.MembershipAddResponse;
@@ -20,6 +21,7 @@ import static com.mang.atdd.membership.app.membership.validation.ValidationGroup
 
 @RestController
 @RequiredArgsConstructor
+@ExecutionTimeChecker
 public class MembershipController extends DefaultRestController {
 
     private final MembershipService membershipService;
