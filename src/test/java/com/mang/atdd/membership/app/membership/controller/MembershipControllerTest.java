@@ -2,6 +2,7 @@ package com.mang.atdd.membership.app.membership.controller;
 
 
 import com.google.gson.Gson;
+import com.mang.atdd.membership.app.common.GlobalExceptionHandler;
 import com.mang.atdd.membership.app.enums.MembershipType;
 import com.mang.atdd.membership.app.membership.dto.MembershipDetailResponse;
 import com.mang.atdd.membership.exception.MembershipErrorResult;
@@ -46,6 +47,7 @@ public class MembershipControllerTest {
     public void init() {
         gson = new Gson();
         mockMvc = MockMvcBuilders.standaloneSetup(target)
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }
 
