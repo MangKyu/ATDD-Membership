@@ -115,10 +115,22 @@ public class MembershipServiceTest {
     @Test
     public void 멤버십상세조회실패_존재하지않음() {
         // given
-        doReturn(null).when(membershipRepository).findByUserIdAndMembershipType(userId, membershipType);
+        doReturn(Optional.empty()).when(membershipRepository).findById(membershipId);
 
         // when
-        final MembershipException result = assertThrows(MembershipException.class, () -> target.getMembership(userId, membershipType));
+        final MembershipException result = assertThrows(MembershipException.class, () -> target.getMembership(membershipId, userId));
+
+        // then
+        assertThat(result.getErrorResult()).isEqualTo(MembershipErrorResult.MEMBERSHIP_NOT_FOUND);
+    }
+
+    @Test
+    public void 멤버십상세조회실패_본인이아님() {
+        // given
+        doReturn(Optional.empty()).when(membershipRepository).findById(membershipId);
+
+        // when
+        final MembershipException result = assertThrows(MembershipException.class, () -> target.getMembership(membershipId, "notowner"));
 
         // then
         assertThat(result.getErrorResult()).isEqualTo(MembershipErrorResult.MEMBERSHIP_NOT_FOUND);
@@ -127,15 +139,10 @@ public class MembershipServiceTest {
     @Test
     public void 멤버십상세조회성공() {
         // given
-        doReturn(Membership.builder()
-                .id(-1L)
-                .membershipType(MembershipType.NAVER)
-                .point(point)
-                .createdAt(LocalDateTime.now()).build()
-        ).when(membershipRepository).findByUserIdAndMembershipType(userId, membershipType);
+        doReturn(Optional.of(membership())).when(membershipRepository).findById(membershipId);
 
         // when
-        final MembershipDetailResponse result = target.getMembership(userId, membershipType);
+        final MembershipDetailResponse result = target.getMembership(membershipId, userId);
 
         // then
         assertThat(result.getMembershipType()).isEqualTo(MembershipType.NAVER);

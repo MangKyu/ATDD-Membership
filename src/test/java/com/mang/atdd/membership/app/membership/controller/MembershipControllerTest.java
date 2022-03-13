@@ -54,7 +54,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십적립실패_사용자식별값이헤더에없음() throws Exception {
         // given
-        final String url = "/api/v1/membership/-1/accumulate";
+        final String url = "/api/v1/memberships/-1/accumulate";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -70,7 +70,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십적립실패_포인트가음수() throws Exception {
         // given
-        final String url = "/api/v1/membership/-1/accumulate";
+        final String url = "/api/v1/memberships/-1/accumulate";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -87,7 +87,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십적립성공() throws Exception {
         // given
-        final String url = "/api/v1/membership/-1/accumulate";
+        final String url = "/api/v1/memberships/-1/accumulate";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -104,7 +104,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십삭제실패_사용자식별값이헤더에없음() throws Exception {
         // given
-        final String url = "/api/v1/membership/-1";
+        final String url = "/api/v1/memberships/-1";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -118,7 +118,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십삭제성공() throws Exception {
         // given
-        final String url = "/api/v1/membership/-1";
+        final String url = "/api/v1/memberships/-1";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -133,28 +133,11 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십상세조회실패_사용자식별값이헤더에없음() throws Exception {
         // given
-        final String url = "/api/v1/membership";
+        final String url = "/api/v1/memberships";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get(url)
-        );
-
-        // then
-        resultActions.andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void 멤버십상세조회실패_멤버십타입이파라미터에없음() throws Exception {
-        // given
-        final String url = "/api/v1/membership";
-
-        // when
-        final ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders.get(url)
-                        .header(USER_ID_HEADER, "12345")
-                        .param("membershipType", "empty")
-
         );
 
         // then
@@ -164,17 +147,15 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십상세조회실패_멤버십이존재하지않음() throws Exception {
         // given
-        final String url = "/api/v1/membership";
+        final String url = "/api/v1/memberships/-1";
         doThrow(new MembershipException(MembershipErrorResult.MEMBERSHIP_NOT_FOUND))
                 .when(membershipService)
-                .getMembership("12345", MembershipType.NAVER);
+                .getMembership(-1L, "12345");
 
         // when
         final ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get(url)
                         .header(USER_ID_HEADER, "12345")
-                        .param("membershipType", MembershipType.NAVER.name())
-
         );
 
         // then
@@ -184,16 +165,16 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십상세조회성공() throws Exception {
         // given
-        final String url = "/api/v1/membership";
+        final String url = "/api/v1/memberships/-1";
+
         doReturn(
                 MembershipDetailResponse.builder().build()
-        ).when(membershipService).getMembership("12345", MembershipType.NAVER);
+        ).when(membershipService).getMembership(-1L, "12345");
 
         // when
         final ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.get(url)
                         .header(USER_ID_HEADER, "12345")
-                        .param("membershipType", MembershipType.NAVER.name())
         );
 
         // then
@@ -203,7 +184,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십목록조회실패_사용자식별값이헤더에없음() throws Exception {
         // given
-        final String url = "/api/v1/membership/list";
+        final String url = "/api/v1/memberships";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -217,7 +198,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십목록조회성공() throws Exception {
         // given
-        final String url = "/api/v1/membership/list";
+        final String url = "/api/v1/memberships";
         doReturn(Arrays.asList(
                 MembershipDetailResponse.builder().build(),
                 MembershipDetailResponse.builder().build(),
@@ -237,7 +218,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십등록실패_사용자식별값이헤더에없음() throws Exception {
         // given
-        final String url = "/api/v1/membership";
+        final String url = "/api/v1/memberships";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -253,7 +234,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십등록실패_포인트가null() throws Exception {
         // given
-        final String url = "/api/v1/membership";
+        final String url = "/api/v1/memberships";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -270,7 +251,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십등록실패_포인트가음수() throws Exception {
         // given
-        final String url = "/api/v1/membership";
+        final String url = "/api/v1/memberships";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -287,7 +268,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십등록실패_멤버십종류가Null() throws Exception {
         // given
-        final String url = "/api/v1/membership";
+        final String url = "/api/v1/memberships";
 
         // when
         final ResultActions resultActions = mockMvc.perform(
@@ -304,7 +285,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십등록실패_MemberService에서에러Throw() throws Exception {
         // given
-        final String url = "/api/v1/membership";
+        final String url = "/api/v1/memberships";
         doThrow(new MembershipException(MembershipErrorResult.DUPLICATED_MEMBERSHIP_REGISTER))
                 .when(membershipService)
                 .addMembership("12345", MembershipType.NAVER, 10000);
@@ -324,7 +305,7 @@ public class MembershipControllerTest {
     @Test
     public void 멤버십등록성공() throws Exception {
         // given
-        final String url = "/api/v1/membership";
+        final String url = "/api/v1/memberships";
         final MembershipAddResponse membershipResponse = MembershipAddResponse.builder()
                 .id(-1L)
                 .membershipType(MembershipType.NAVER).build();

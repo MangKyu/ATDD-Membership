@@ -25,7 +25,7 @@ public class MembershipController {
 
     private final MembershipService membershipService;
 
-    @PostMapping("/api/v1/membership")
+    @PostMapping("/api/v1/memberships")
     public ResponseEntity<MembershipAddResponse> addMembership(
             @RequestHeader(USER_ID_HEADER) final String userId,
             @RequestBody @Validated(MembershipAddMarker.class) final MembershipRequest membershipRequest) {
@@ -36,23 +36,23 @@ public class MembershipController {
                 .body(membershipResponse);
     }
 
-    @GetMapping("/api/v1/membership/list")
+    @GetMapping("/api/v1/memberships")
     public ResponseEntity<List<MembershipDetailResponse>> getMembershipList(
             @RequestHeader(USER_ID_HEADER) final String userId) {
 
         return ResponseEntity.ok(membershipService.getMembershipList(userId));
     }
 
-    @GetMapping("/api/v1/membership")
+    @GetMapping("/api/v1/memberships/{id}")
     public ResponseEntity<MembershipDetailResponse> getMembership(
             @RequestHeader(USER_ID_HEADER) final String userId,
-            @RequestParam final MembershipType membershipType) {
+            @PathVariable final Long id) {
 
-        return ResponseEntity.ok(membershipService.getMembership(userId, membershipType));
+        return ResponseEntity.ok(membershipService.getMembership(id, userId));
     }
 
-    @DeleteMapping("/api/v1/membership/{id}")
-    public ResponseEntity<Void> getMembership(
+    @DeleteMapping("/api/v1/memberships/{id}")
+    public ResponseEntity<Void> removeMembership(
             @RequestHeader(USER_ID_HEADER) final String userId,
             @PathVariable final Long id) {
 
@@ -60,7 +60,7 @@ public class MembershipController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/api/v1/membership/{id}/accumulate")
+    @PostMapping("/api/v1/memberships/{id}/accumulate")
     public ResponseEntity<Void> accumulateMembershipPoint(
             @RequestHeader(USER_ID_HEADER) final String userId,
             @PathVariable final Long id,

@@ -58,17 +58,18 @@ public class MembershipService {
                 .collect(Collectors.toList());
     }
 
-    public MembershipDetailResponse getMembership(final String userId, final MembershipType membershipType) {
-        final Membership findResult = membershipRepository.findByUserIdAndMembershipType(userId, membershipType);
-        if (findResult == null) {
-            throw new MembershipException(MembershipErrorResult.MEMBERSHIP_NOT_FOUND);
+    public MembershipDetailResponse getMembership(final Long membershipId, final String userId) {
+        final Optional<Membership> optionalMembership = membershipRepository.findById(membershipId);
+        final Membership membership = optionalMembership.orElseThrow(() -> new MembershipException(MembershipErrorResult.MEMBERSHIP_NOT_FOUND));
+        if (!membership.getUserId().equals(userId)) {
+            throw new MembershipException(MembershipErrorResult.NOT_MEMBERSHIP_OWNER);
         }
 
         return MembershipDetailResponse.builder()
-                .id(findResult.getId())
-                .membershipType(findResult.getMembershipType())
-                .point(findResult.getPoint())
-                .createdAt(findResult.getCreatedAt())
+                .id(membership.getId())
+                .membershipType(membership.getMembershipType())
+                .point(membership.getPoint())
+                .createdAt(membership.getCreatedAt())
                 .build();
     }
 
